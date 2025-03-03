@@ -61,7 +61,7 @@ Add water to the box. Each bead of water represents 4 water molecules
 
 ```gromacs
 gmx_mpi grompp -f ions.mdp -c Grid_KYFIL_CG_water.gro -p system.top -o ions.tpr
-```gromacs
+```
 
 Ionize prestep
 
