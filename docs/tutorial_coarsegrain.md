@@ -1,2 +1,2 @@
-# Rivanna
+# Coarse Grain with Gromacs Tutorial
 
