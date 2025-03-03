@@ -17,24 +17,24 @@ Next, with a Peptide PDB file, use the following command to make it into a coars
 martinize2 -f KYFIL.pdb  -x KYFIL_CG.pdb -o single_KYFIL.top -ff martini3001 -ss C -cter COOH-ter
 ```
 
--ff: pick which force field you would like to use
--ss: secondary structure for the simulation, it is coil since at the beginning there is no structure
--cter: amidate the c terminus, deleting the charge
+* -ff: pick which force field you would like to use
+* -ss: secondary structure for the simulation, it is coil since at the beginning there is no structure
+* -cter: amidate the c terminus, deleting the charge
 
 This command switches the file format from pdb to gro, 
 ```gromacs
 gmx_mpi  editconf -f KYFIL_CG.pdb -o KYFIL_CG.gro -d .5
 ```
 
--d: adds a 5 anstrom buffer
+* -d: adds a 5 anstrom buffer
 
 Place the peptides into a 4 by 4 by 4 box
 
 ```gromacs
 gmx_mpi genconf -f KYFIL_CG.gro -nbox 4 4 4 -rot yes -dist 1 2 1 -o KYFIL_64_box_cg.gro
 ```
--rot: rotate peptide randomly 
--dist: how far each peptides needs to be placed in x y z direction
+* -rot: rotate peptide randomly 
+* -dist: how far each peptides needs to be placed in x y z direction
 
 ```gromacs
 gmx_mpi solvate -cp KYFIL_64_box_cg.gro -cs water.gro -o Grid_KYFIL_CG_water.gro -box 13 13 13
@@ -69,17 +69,17 @@ Ionize prestep
 gmx_mpi genion -s ions.tpr -pname NA -nname CL -neutral -conc 0.15 -o Grid_KYFIL_CG_ion.gro
 ```
 Press 13 for W
-    Add salts to the simulation
-    -pname: positive charge
-    -nname: negative charge
-    -neutral: neutralize
-    -conc: concentration of salt
+Add salts to the simulation
+* -pname: positive charge
+* -nname: negative charge
+*  -neutral: neutralize
+* -conc: concentration of salt
 
 **Need to add in system.top file and number of solvent molecules (W, NA, CL)**
 Use the following commands on the terminal
-grep -c W Grid_KYFIL_CG_ion.gro
-grep -c CL Grid_KYFIL_CG_ion.gro
-grep -c NA Grid_KYFIL_CG_ion.gro
+* grep -c W Grid_KYFIL_CG_ion.gro
+* grep -c CL Grid_KYFIL_CG_ion.gro
+* grep -c NA Grid_KYFIL_CG_ion.gro
 
 Using those numbers gathered from the commands, add the values into the system.top file
 
@@ -112,6 +112,7 @@ gmx_mpi grompp -f minimization.mdp -c Grid_KYFIL_CG_ion.gro -p system.top -o min
 Pre running minimization
 
 Run minimization slurm script (take roughly 2-5 minutes)
+
 **NOTE: RUN THE NEXT COMMAND ON A SLURM SCRIPT**
 
 ```gromacs
@@ -139,6 +140,7 @@ gmx_mpi grompp -f dynamic.mdp -c minimization.gro -p system.top -o dynamic.tpr
 ```
 
 Pre running dynamic run
+
 **NOTE: RUN THE NEXT COMMAND ON A SLURM SCRIPT**
 
 ```gromacs
@@ -158,3 +160,5 @@ gmx mdrun -v -deffnm dynamic
 ```
 
 Should look something like this.
+
+Let the simulation run now!
