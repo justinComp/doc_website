@@ -12,4 +12,4 @@ For example, our D amino acids have been a big hassle throughout the past 2 year
 
 So that's part of my motivation to continue computational work! I hope you find your passion to continue and investigate more on this topic (some ideas include changing NAMD parameters, pH conditions, other solvents other than water, etc). 
 
-See Rivanna Introduction [here](rivanna.md)
+See Tutorials [here](tutorial.md)
