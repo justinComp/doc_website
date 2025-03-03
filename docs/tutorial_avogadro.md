@@ -21,3 +21,26 @@ Once the pdb is saved, if you are building the D sterochemistry, open the pdb in
 
 After the pdb file is constructed, go to [CHARMM.GUI](https://charmm-gui.org/) and go to the PDB reader & manipulator tab.
 
+![PDBMANIP](images/PDB_READER_MANIP.png)
+
+Don't change anything here.
+
+![PROA](images/PROA.png)
+
+Amidate the C terminus.
+
+![Cter](images/AMIDATE.png)
+
+Download the files.
+
+![download](images/DOWNLOAD_PSF.png)
+
+Open the pdb file and change the 3 letter code again to 4.
+
+![pdbchangeagain](images/CHANGE_PSF.png)
+
+And you are done for now!
+
+If you are creating a atomistic simulation, go to namd or gromacs
+
+If you are creating a coarse grain simulation, go here
