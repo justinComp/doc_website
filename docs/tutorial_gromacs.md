@@ -158,7 +158,7 @@ gmx mdrun -v -deffnm md
 
 ---
 
-### ✅ You're Done!
+### You're Done!
 
 Your simulation is now running. When complete, you'll have `.gro`, `.xtc`, and `.edr` files ready for analysis.
 

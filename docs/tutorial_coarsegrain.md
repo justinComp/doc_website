@@ -1,129 +1,162 @@
-# Coarse Grain with Gromacs Tutorial
+Here is a cleaned and professional version of your Coarse Grain with GROMACS tutorial, formatted clearly for reproducibility:
 
-The necessary files will be downloadable [here](https://drive.google.com/drive/folders/13CHhxHLBMIX4VO-UOdFUi3loL8YrpLb8?usp=sharing).
+---
 
-Open the terminal in Rivanna and type the following commands:
+# Coarse-Grained Simulation with GROMACS: KYFIL Peptide
 
-```gromacs
+## Getting Started
+
+Download the necessary files from this [Google Drive folder](https://drive.google.com/drive/folders/13CHhxHLBMIX4VO-UOdFUi3loL8YrpLb8?usp=sharing).
+
+### Load Required Modules on Rivanna
+
+```bash
 module load gcc/11.4.0 openmpi/4.1.4 gromacs/2023.2
 module spider gromacs/2023.2
-Pip install vermouth
-export PATH=$PATH:/home/(yourcomputingID)/.local/bin
+pip install --user vermouth
+export PATH=$PATH:/home/YOUR_COMPUTING_ID/.local/bin
 ```
 
-Next, with a Peptide PDB file, use the following command to make it into a coarse grain form.
+---
 
-```gromacs
-martinize2 -f KYFIL.pdb  -x KYFIL_CG.pdb -o single_KYFIL.top -ff martini3001 -ss C -cter NH2-ter
+## Step 1: Create Coarse-Grained Peptide
+
+Convert the atomistic peptide PDB file to a coarse-grained model using `martinize2`.
+
+```bash
+martinize2 -f KYFIL.pdb -x KYFIL_CG.pdb -o single_KYFIL.top -ff martini3001 -ss C -cter NH2-ter
 ```
 
-* -ff: pick which force field you would like to use
-* -ss: secondary structure for the simulation, it is coil since at the beginning there is no structure
-* -cter: amidate the c terminus, deleting the charge
+**Flags:**
 
-This command switches the file format from pdb to gro, 
-```gromacs
-gmx_mpi  editconf -f KYFIL_CG.pdb -o KYFIL_CG.gro -d .5
+* `-ff`: Force field (`martini3001`)
+* `-ss`: Secondary structure (use `C` for coil)
+* `-cter`: Terminus (NH2 amidation at C-terminus)
+
+---
+
+## Step 2: Convert PDB to GRO
+
+```bash
+gmx_mpi editconf -f KYFIL_CG.pdb -o KYFIL_CG.gro -d 0.5
 ```
 
-* -d: adds a 5 anstrom buffer
+Adds a 0.5 nm buffer around the peptide.
 
-Place the peptides into a 4 by 4 by 4 box
+---
 
-```gromacs
+## Step 3: Create Peptide Grid
+
+```bash
 gmx_mpi genconf -f KYFIL_CG.gro -nbox 4 4 4 -rot yes -dist 1 2 1 -o KYFIL_64_box_cg.gro
 ```
-* -rot: rotate peptide randomly 
-* -dist: how far each peptides needs to be placed in x y z direction
 
-```gromacs
+**Notes:**
+
+* 64 peptides total (4 × 4 × 4)
+* Randomly rotates each peptide
+* Spacing defined by `-dist` in nm (x y z)
+
+---
+
+## Step 4: Solvate the Box
+
+```bash
 gmx_mpi solvate -cp KYFIL_64_box_cg.gro -cs water.gro -o Grid_KYFIL_CG_water.gro -box 13 13 13
 ```
-Add water to the box. Each bead of water represents 4 water molecules
 
-    Text generated from solvent:
-    Generated solvent containing 18674 atoms in 18674 residues
-    Writing generated configuration to Grid_KYFIL_CG_water.gro
-    Back Off! I just backed up Grid_KYFIL_CG_water.gro to ./#Grid_KYFIL_CG_water.gro.12#
-    Output configuration contains 19698 atoms in 18994 residues
-    Volume                 :        2197 (nm^3)
-    Density                :     2614.43 (g/l)
-    Number of solvent molecules:  18674  
+Adds coarse-grained water (1 bead = 4 water molecules).
 
+Example output:
 
-**In your file, you should have a  single_kyfil.top file, which should contain a molecule_0 1. Copy the file and make a new file named system.top**
+* \~18,674 water molecules
+* Volume ≈ 2197 nm³
+* Density ≈ 2614 g/L
 
-    Open the system.top file and add the number of solvent molecules (W). Additionally, include the following:
-    #include "martini_v3.0.0.itp"
-    #include "martini_v3.0.0_solvents_v1.itp"
-    #include "martini_v3.0.0_ions_v1.itp"
-    #include "molecule_0.itp"
+---
 
-```gromacs
+## Step 5: Prepare Topology File
+
+1. Copy `single_KYFIL.top` to `system.top`
+2. Open `system.top` and edit it to include:
+
+```text
+#include "martini_v3.0.0.itp"
+#include "martini_v3.0.0_solvents_v1.itp"
+#include "martini_v3.0.0_ions_v1.itp"
+#include "molecule_0.itp"
+
+[ system ]
+Title of the system
+
+[ molecules ]
+molecule_0    64
+W             [# water molecules]
+```
+
+Replace `[ # water molecules ]` with the number from:
+
+```bash
+grep -c W Grid_KYFIL_CG_water.gro
+```
+
+---
+
+## Step 6: Add Ions
+
+Generate the input file for ion addition:
+
+```bash
 gmx_mpi grompp -f ions.mdp -c Grid_KYFIL_CG_water.gro -p system.top -o ions.tpr
 ```
 
-Ionize prestep
+Add NaCl to 0.15 M concentration:
 
-```gromacs
+```bash
 gmx_mpi genion -s ions.tpr -pname NA -nname CL -neutral -conc 0.15 -o Grid_KYFIL_CG_ion.gro
 ```
-Press 13 for W
-Add salts to the simulation
-* -pname: positive charge
-* -nname: negative charge
-*  -neutral: neutralize
-* -conc: concentration of salt
 
-**Need to add in system.top file and number of solvent molecules (W, NA, CL)**
-Use the following commands on the terminal
-* grep -c W Grid_KYFIL_CG_ion.gro
-* grep -c CL Grid_KYFIL_CG_ion.gro
-* grep -c NA Grid_KYFIL_CG_ion.gro
+Choose group `13` (water) when prompted.
 
-Using those numbers gathered from the commands, add the values into the system.top file
+Get updated atom counts:
 
-Your system.top file should look like this.
+```bash
+grep -c W Grid_KYFIL_CG_ion.gro
+grep -c CL Grid_KYFIL_CG_ion.gro
+grep -c NA Grid_KYFIL_CG_ion.gro
+```
 
-    #include "martini_v3.0.0.itp"
-    #include "martini_v3.0.0_solvents_v1.itp"
-    #include "martini_v3.0.0_ions_v1.itp"
-    #include "molecule_0.itp"
+Update `system.top` again:
 
-    [ system ]
-    Title of the system
+```text
+[ molecules ]
+molecule_0    64
+W             18150
+CL            326
+NA            198
+```
 
-    [ molecules ]
-    molecule_0    64
-    W 18150
-    CL 326
-    NA 198
+---
 
-![cgcalc](images/calcforcoarsegrain.png)
+## Step 7: Energy Minimization
 
-Roughly 3.4 wt% of kyfil
+Prepare:
 
-Running the simulation:
-Type this into terminal:
-```gromacs
+```bash
 gmx_mpi grompp -f minimization.mdp -c Grid_KYFIL_CG_ion.gro -p system.top -o minimization.tpr -maxwarn 2
 ```
 
-Pre running minimization
+Submit using a SLURM script:
 
-Run minimization slurm script (take roughly 2-5 minutes)
-
-**NOTE: RUN THE NEXT COMMAND ON A SLURM SCRIPT**
-
-```gromacs
+```bash
 #!/bin/bash
 #SBATCH --nodes=7
 #SBATCH --ntasks-per-node=36
-#SBATCH --mail-user[computingID]@virginia.edu
+#SBATCH --mail-user=YOUR_COMPUTING_ID@virginia.edu
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT
 #SBATCH --time=3-00:00:00
 #SBATCH --partition=parallel
-#SBATCH -A [allocation]
+#SBATCH -A YOUR_ALLOCATION
 #SBATCH -o minimize.out
 
 module purge
@@ -131,34 +164,36 @@ module load gcc/11.4.0 openmpi/4.1.4 gromacs/2023.2
 gmx mdrun -v -deffnm minimization
 ```
 
-Should look something like this.
+---
 
+## Step 8: Run Dynamics
 
-Type this into terminal:
-```gromacs
-gmx_mpi grompp -f dynamic.mdp -c minimization.gro -p system.top -o dynamic.tpr 
+Preprocess for dynamics:
+
+```bash
+gmx_mpi grompp -f dynamic.mdp -c minimization.gro -p system.top -o dynamic.tpr
 ```
 
-Pre running dynamic run
+Submit dynamics run with:
 
-**NOTE: RUN THE NEXT COMMAND ON A SLURM SCRIPT**
-
-```gromacs
+```bash
 #!/bin/bash
 #SBATCH --nodes=7
 #SBATCH --ntasks-per-node=36
-#SBATCH --mail-user[computingID]@virginia.edu
+#SBATCH --mail-user=YOUR_COMPUTING_ID@virginia.edu
 #SBATCH --mail-type=END,FAIL,TIME_LIMIT
 #SBATCH --time=3-00:00:00
 #SBATCH --partition=parallel
-#SBATCH -A [allocation]
-#SBATCH -o minimize.out
+#SBATCH -A YOUR_ALLOCATION
+#SBATCH -o dynamic.out
 
 module purge
 module load gcc/11.4.0 openmpi/4.1.4 gromacs/2023.2
 gmx mdrun -v -deffnm dynamic
 ```
 
-Should look something like this.
+---
 
-Let the simulation run now!
+Your simulation is now set up and running.
+
+Let me know if you'd like help automating this with a script or integrating multiple peptide types.

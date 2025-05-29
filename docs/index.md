@@ -1,70 +1,90 @@
-# Simulation Tutorial 
+# Simulation Tutorial
 
-    For Lampe/Letteri/Taylor Computational Group. Created by Justin Kim (zqp6mj)
+*For the Lampe/Letteri/Taylor Computational Group*
+*Created by Justin Kim*
 
+---
 
-## WELCOME!
+## Welcome
 
-Welcome to the Computational group! You join this project mainly because you like biomaterials, coding or just curious about MD.
+Welcome to the Computational Group. Whether you're here because you're interested in biomaterials, coding, or simply curious about molecular dynamics (MD), we’re excited to have you join the team.
 
-Before you start, I want you to download: 
+Before diving into simulations, please follow the instructions below to install the necessary tools and familiarize yourself with our computing environment.
 
-For people on Mac/Windows, everything should be the same!
+---
 
-Download [Visual Molecular Dynamics](https://www.google.com/url?q=https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.3/&sa=D&source=docs&ust=1740806505460574&usg=AOvVaw3kcYOKcLUVKk_HkS8Yabzt). 
+## Required Downloads
 
-    VMD is mainly used to create our peptide systems using TCL Scripts
+**[Visual Molecular Dynamics (VMD)](https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.3/)**
+VMD is primarily used to build and visualize peptide systems using TCL scripts.
 
-Download [Visual Studio Code](https://code.visualstudio.com/download). 
+**[Visual Studio Code (VSCode)](https://code.visualstudio.com/download)**
+VSCode is our go-to text editor for `.pdb`, `.psf`, `.txt` files, and scripting in Python, TCL, or Jupyter Notebooks. If you need help with it, feel free to ask Justin.
 
-    VSCode is mainly used as a text editor for PDB, PSF, TXT files and IDE for many of the programming languages including Python, TCL, and jupyter notebook
-    If you need help with VSCode and how to work around it just let me (Justin) know 
+**[Globus](https://www.globus.org/)**
+Globus allows for efficient file transfers between your local computer and Rivanna.
 
-Download [Globus](https://www.globus.org/)
+**[Avogadro](https://two.avogadro.cc/index.html)**
+This tool is useful for constructing molecular structures and exporting them as `.pdb` files.
 
-    This will allow you to transfer files from your local computer and Rivanna
+**[CHARMM-GUI](https://charmm-gui.org/)**
+Create an account on this website. CHARMM-GUI is used to convert `.pdb` files into CHARMM-compatible files and generate `.psf` files for simulations.
 
-Download [Avogadro](https://two.avogadro.cc/index.html)
-    
-    Like Chem Draw, this program makes our molecules into PDB files 
+---
 
-Go to [CHARMM.GUI](https://charmm-gui.org/) and ask for an account.
-    
-    Make our PDB files CHARMM Force Field Friendly ands make our psf files.
+## Using Rivanna (UVA High-Performance Computing)
 
+We run our simulations on **[Rivanna](https://www.rc.virginia.edu/userinfo/hpc/)**, UVA’s High-Performance Computing cluster. You’ll access it via **[Open OnDemand](https://www.rc.virginia.edu/userinfo/hpc/login/)**, a web-based interface.
 
-Also we will be using [Rivanna](https://www.rc.virginia.edu/userinfo/hpc/) for our simulations. They have really tutorials and have friendly help ticket helpers. We will specifically be using [OpenOnDemand](https://www.rc.virginia.edu/userinfo/hpc/login/), which allows us to access the virtual desktop and virtual terminals for our simulations. 
+### Key Tabs in Open OnDemand
 
-picture of open on demand
+* **Jobs** – View and monitor submitted SLURM job scripts.
+* **Clusters** – Terminal access to the head node, where you submit jobs.
+* **Interactive Apps** – Open virtual tools such as Jupyter Notebooks and Virtual Desktop.
+* **My Interactive Sessions** – View and manage your active sessions.
 
-Looking at the top of the OpenOnDemand website, there are 4 main tabs you will use: Jobs, Clusters, Interactive Apps, and Interactive Sessions.
+It is important to be familiar with basic Unix terminal commands. These guides are helpful:
 
-* Jobs are used to see what slurm scripts you submitted for a process (usually an analysis script or a simulation)
-* Cluster is a local terminal on the head node. This is where you should be submitting jobs.
-* Interactive Apps will show you more applications you can open on the super computer. The only important ones are jupyter notebook and desktop.
-* My interactive sessions are used to see what interactive applications you have open.
+* [Fosswire Unix Cheat Sheet (PDF)](https://files.fosswire.com/2007/08/fwunixref.pdf)
+* [UVA RC Unix Tutorial](https://learning.rc.virginia.edu/notes/unix-tutorial/)
 
-The terminal uses unix commands that I highly recommend you learn. Here are some good sites to learn [1](https://files.fosswire.com/2007/08/fwunixref.pdf) [2](https://learning.rc.virginia.edu/notes/unix-tutorial/).
+---
 
-As you learn more about Rivanna, just remember that you have 3 main file directories: Home, Project and Scratch.
+## File System Overview
 
-**YOU WANT TO DO SIMULATIONS ON SCRATCH AND SCRATCH ONLY!!!** But keep in mind that files are removed after 90 days, so start putting the files you want to keep in the projects file.
+Rivanna provides three main directories. Understanding what each is used for will help you manage your data effectively.
 
-Projects is a shared file between all of us to put our final data and scripts to share.
+* **`/scratch`** – Run all simulations here. Files in this directory are automatically deleted after 90 days, so be sure to back up anything important.
+* **`/project`** – Shared among the group. Use this to store final results, key data, and reusable scripts.
+* **`/home`** – Your personal directory. Suitable for small scripts or configuration files. Do not run simulations here.
 
-Home is usually for quick scripts and small files.
+**Important:**
+Simulations must be run in `/scratch` to ensure performance and avoid overloading the system.
+Files you want to keep should be moved to `/project`.
 
-Programming Languages
-Some of the programming languages you should know to an extent are Python and TCL.
+---
 
-Here are some [TCL tutorials](https://www.tcl-lang.org/man/tcl8.5/tutorial/tcltutorial.html) that you can use to practice.
+## Programming Languages
 
-Here are some [Python tutorials](https://www.w3schools.com/python/) that you can use to practice.
+You will encounter the following languages during your work in the group:
 
-Although it helps to have a programming background, if it is hard to understand that is ok! Learning is the process.
+### TCL
 
-If you don’t understand the code, feel free to just search it up or ask one of us!
+Used primarily for scripting in VMD.
+Tutorial: [TCL Basics](https://www.tcl-lang.org/man/tcl8.5/tutorial/tcltutorial.html)
 
+### Python
 
-See Introduction [here](more_information.md)
+Used for data analysis, plotting, and automation.
+Tutorial: [Python Basics](https://www.w3schools.com/python/)
+
+It’s okay if you’re not familiar with either language. The most important thing is a willingness to learn. Don’t hesitate to ask questions or look things up.
+
+---
+
+## Next Steps
+
+Continue to the [Introduction](more_information.md) for project-specific protocols and the next part of your onboarding.
+
+---
 

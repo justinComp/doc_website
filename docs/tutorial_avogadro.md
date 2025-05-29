@@ -1,46 +1,92 @@
 # Avogadro Tutorial
 
-Open Avogadro and on the top, select Build -> Insert -> Peptides.
+This tutorial will guide you through building a peptide in Avogadro and preparing it for use in simulations, with attention to **chirality editing** for D-amino acids.
 
-![BUILD](images/AVOGADRO_OPEN_BUILD.png)
+---
 
-Click on the different amino acids to build the peptide. In this case we will be creating KYFIL (LYS-TYR-PHE-ILE-LEU).
+### Step 1: Open Avogadro and Build Peptide
 
-![INSERT](images/INSERT_PEPTIDE.png)
+1. Launch Avogadro.
 
-When creating the D-sterochemistry, you would need to specifically select the alpha carbons on each amino acids and use the INVERT CHIRALITY function in order to individually switch the S configuration of the alpha carbons to R. You will need to select the beta carbon on the side chain of the isoleucine to be swapped. 
+2. Navigate to the top menu:
+   **Build → Insert → Peptides**
 
-Deselect the peptide:
-![SELECTNONE](images/SELECT_NONE.png)
+   ![BUILD](images/AVOGADRO_OPEN_BUILD.png)
 
-Only select the alpha carbon and beta carbon (on isoleucine)
-![AC](images/ALPHACARBON.png)
+3. In the **Insert Peptides** window, click to add the desired amino acids to construct your peptide.
+   Example: `KYFIL` → Lys-Tyr-Phe-Ile-Leu
 
-Once the pdb is saved, if you are building the D sterochemistry, open the pdb in your favorite text editor and add a D to every 3 letter amino acid code. Make sure there are not spaces. 
-![3to4](images/3_to_4_code.png)
+   ![INSERT](images/INSERT_PEPTIDE.png)
 
-After the pdb file is constructed, go to [CHARMM.GUI](https://charmm-gui.org/) and go to the PDB reader & manipulator tab.
+---
 
-![PDBMANIP](images/PDB_READER_MANIP.png)
+### Step 2: Modify to D-Stereochemistry (if needed)
 
-Don't change anything here.
+For **D-amino acids**, you must manually invert chirality:
 
-![PROA](images/PROA.png)
+1. **Deselect the entire structure**:
+   **Select → Select None**
 
-Amidate the C terminus.
+   ![SELECTNONE](images/SELECT_NONE.png)
 
-![Cter](images/AMIDATE.png)
+2. **Manually select the α-carbon** on the amino acid residue (and β-carbon for Ile):
 
-Download the files.
+   * Only select the **α-carbon** and adjacent **β-carbon** for each D-amino acid.
 
-![download](images/DOWNLOAD_PSF.png)
+   ![AC](images/ALPHACARBON.png)
 
-Open the pdb file and change the 3 letter code again to 4.
+3. **Invert chirality**:
+   **Build → Invert Chirality** (or right-click if using tools)
 
-![pdbchangeagain](images/CHANGE_PSF.png)
+Repeat for each D-residue. Avogadro does not automatically label chirality, so this step is crucial for accuracy.
 
-And you are done for now! Note for L amino acids, you do not need to go through this hassle.
+---
 
-If you are creating a atomistic simulation, go to namd or gromacs
+### Step 3: Save and Modify PDB File
 
-If you are creating a coarse grain simulation, go here
+After saving your `.pdb` file:
+
+* **For D-residues**, manually update the residue names in a text editor:
+
+  * Change 3-letter amino acid codes to include a **D** prefix (e.g., `TYR` → `DTYR`).
+  * Ensure there are **no spaces** in the updated codes.
+
+  ![3to4](images/3_to_4_code.png)
+
+---
+
+### Step 4: Use CHARMM-GUI for Further Processing
+
+1. Go to [CHARMM-GUI PDB Reader](https://charmm-gui.org/?doc=input/pdbreader).
+
+2. Upload your edited PDB file under **PDB Reader & Manipulator**.
+
+   ![PDBMANIP](images/PDB_READER_MANIP.png)
+
+3. Leave the default settings unchanged.
+
+   ![PROA](images/PROA.png)
+
+4. **Amidate the C-terminus** by checking the appropriate box.
+
+   ![Cter](images/AMIDATE.png)
+
+5. Download the processed files (e.g., PSF and PDB).
+
+   ![download](images/DOWNLOAD_PSF.png)
+
+6. Open the downloaded `.pdb` file and reapply the D-prefix to any D-residues if CHARMM-GUI reverted them.
+
+   ![pdbchangeagain](images/CHANGE_PSF.png)
+
+---
+
+### Notes
+
+* **For L-amino acids**, you do **not** need to invert chirality or change residue codes.
+* After generating your final structure, proceed to the appropriate tutorial:
+
+  * For **atomistic simulations**, use the [NAMD](https://www.ks.uiuc.edu/Research/namd/) or [GROMACS](http://www.gromacs.org/) workflow.
+  * For **coarse-grained simulations**, continue to the [Coarse Grain with GROMACS Tutorial](#).
+
+---
