@@ -1,8 +1,4 @@
-Here is a cleaned and professional version of your Coarse Grain with GROMACS tutorial, formatted clearly for reproducibility:
-
----
-
-# Coarse-Grained Simulation with GROMACS: KYFIL Peptide
+# Coarse-Grained Simulation with GROMACS
 
 ## Getting Started
 
@@ -196,4 +192,3 @@ gmx mdrun -v -deffnm dynamic
 
 Your simulation is now set up and running.
 
-Let me know if you'd like help automating this with a script or integrating multiple peptide types.
