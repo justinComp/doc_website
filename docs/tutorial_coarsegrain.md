@@ -14,7 +14,7 @@ export PATH=$PATH:/home/(yourcomputingID)/.local/bin
 Next, with a Peptide PDB file, use the following command to make it into a coarse grain form.
 
 ```gromacs
-martinize2 -f KYFIL.pdb  -x KYFIL_CG.pdb -o single_KYFIL.top -ff martini3001 -ss C -cter COOH-ter
+martinize2 -f KYFIL.pdb  -x KYFIL_CG.pdb -o single_KYFIL.top -ff martini3001 -ss C -cter NH2-ter
 ```
 
 * -ff: pick which force field you would like to use

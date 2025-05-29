@@ -23,10 +23,11 @@ This command switches the pdb format to a gromacs format.
 gmx_mpi pdb2gmx -f dkyfilinvert.pdb -o dkyfil.gro
 ```
 
-Options will show up:
-1. Press 1 for charm force field from my own ff
-2. Press 1 to tip3p charmm 
-4. Press 2 to amidate the leu ending CT2 
+Options will show up.
+
+* Press 1 for charm force field from my own ff
+* Press 1 to tip3p charmm 
+* Press 2 to amidate the leu ending CT2 
 
 This commands makes the 4 x 4 x 4 grid. The -rot command rotates the peptide in a random direction. The -dist command gives room around the peptide in the x y and z direction in nm.
 

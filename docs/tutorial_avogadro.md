@@ -39,7 +39,7 @@ Open the pdb file and change the 3 letter code again to 4.
 
 ![pdbchangeagain](images/CHANGE_PSF.png)
 
-And you are done for now!
+And you are done for now! Note for L amino acids, you do not need to go through this hassle.
 
 If you are creating a atomistic simulation, go to namd or gromacs
 
