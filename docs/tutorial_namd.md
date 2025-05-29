@@ -105,11 +105,19 @@ Helpful navigation tips:
 * `cd ../` — move back one folder level
 * `pwd` — print your current working directory
 
-4. Run the script:
+4. Load the script:
 
 ```tcl
 source makefiles.tcl
 ```
+
+5. Run the script:
+
+```tcl
+makegrid LnewIons Lkyfil Lkyfil 64/64 0/64 64 4 4 4 32 5
+```
+
+Script may take a while as it loads the peptides. If it seems to fail, **restart VMD** and reload the script after hard coding values.
 ---
 
 
